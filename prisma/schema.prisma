@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int              @id @default(autoincrement())
+  email            String           @unique @db.VarChar(255)
+  password         String           @db.VarChar(255)
+  whatsapp         String           @db.VarChar(20)  // Formato: DDD + Número (ex: "21982955399")
+  nome             String
+  dataNascimento   DateTime
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  sessions         Session[]
+  likedCategories  EventCategory[]  @relation("UserLikedCategories")
+  likedLocations   EventLocation[]  @relation("UserLikedLocations")
+}
+
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EventCategory {
+  id        Int         @id @default(autoincrement())
+  name      String
+  events    Event[]     @relation("EventCategory")
+  users     User[]      @relation("UserLikedCategories")
+}
+
+model EventLocation {
+  id         Int       @id @default(autoincrement())
+  name       String
+  address    String
+  phone      String
+  users      User[]    @relation("UserLikedLocations")
+  events     Event[]
+}
+
+model Event {
+  id              Int           @id @default(autoincrement())
+  title           String
+  backgroundImageUrl String
+  logoImageUrl    String
+  startsAt        DateTime
+  endsAt          DateTime
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  categories      EventCategory[]  @relation("EventCategory")
+  location        EventLocation?   @relation(fields: [locationId], references: [id])
+  locationId      Int?
+}
