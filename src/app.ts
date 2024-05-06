@@ -10,6 +10,7 @@ loadEnv();
 import { handleApplicationErrors } from '@/middlewares';
 import {
   usersRouter,
+  signupRouter,
   authenticationRouter,
   categoryRouter,
   locationRouter
@@ -20,8 +21,9 @@ app
   .use(cors())
   .use(express.json())
   .get('/health', (_req, res) => res.send('OK!'))
-  .use('/sign-up', usersRouter)
+  .use('/sign-up', signupRouter)
   .use('/sign-in', authenticationRouter)
+  .use('/home', usersRouter)
   .use('/categories', categoryRouter)
   .use('/location', locationRouter)
   .use(handleApplicationErrors);

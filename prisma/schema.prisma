@@ -24,7 +24,6 @@ model User {
   likedLocations   EventLocation[]  @relation("UserLikedLocations")
 }
 
-
 model Session {
   id        Int      @id @default(autoincrement())
   userId    Int

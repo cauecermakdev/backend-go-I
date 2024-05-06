@@ -58,12 +58,13 @@ async function main() {
 
   // Função para criar categorias de eventos
   async function createEventCategories() {
-    const categories = ['Music', 'Sports', 'Technology', 'Food', 'Fashion']; // Apenas 5 categorias
+    const categories = ['Cervejada', 'Funk', 'Rock', 'Samba', 'Trap']; // Apenas 5 categorias
 
-    for (const category of categories) {
+    for (let i = 0; i < categories.length; i++) {
       await prisma.eventCategory.create({
         data: {
-          name: category,
+          id: i + 1,
+          name: categories[i],
         },
       });
     }

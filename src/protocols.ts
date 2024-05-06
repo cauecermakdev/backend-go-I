@@ -30,3 +30,13 @@ export type RequestError = {
   name: string,
   message: string,
 };
+
+export type UserComplete = {
+    email: string;
+    password: string;
+    whatsapp: string;
+    nome: string;
+    dataNascimento: Date;
+    likedCategories: number[],
+    likedLocations: number[],
+};

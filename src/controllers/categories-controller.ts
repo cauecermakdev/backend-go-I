@@ -6,6 +6,8 @@ import httpStatus from 'http-status';
 
 export async function getUsersByCategoriesController(req: AuthenticatedRequest, res: Response) {
   try {
+    console.log("aqui");
+    console.log(req.body);
     const { category } = req.body; 
     const categories = await categoryService.getUsersByCategoriesService(category);
     return res.status(httpStatus.OK).send(categories);
@@ -14,7 +16,7 @@ export async function getUsersByCategoriesController(req: AuthenticatedRequest, 
   }
 }
 
-export async function getCategoriesController(req: AuthenticatedRequest, res: Response) {
+export async function getCategoriesController(req: Request, res: Response) {
   try {
     const categories = await categoryService.getCategoriesService();
     return res.status(httpStatus.OK).send(categories);

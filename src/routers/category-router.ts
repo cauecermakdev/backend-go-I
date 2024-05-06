@@ -12,8 +12,8 @@ const categoryRouter = Router();
 
 categoryRouter
   .get("/categories", getCategoriesController)
+  .post("/all-users", getUsersByCategoriesController)
   .all("/*", authenticateToken)
-  .get("/all-users", getUsersByCategoriesController)
   .get("/user", getUserCategoriesController)
   .post("/categories", validateBody(categorySchema), postCategoryController);
 

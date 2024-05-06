@@ -16,7 +16,9 @@ async function upsert(
 }
 
 async function getCategoriesRepository() {
-  return prisma.eventCategory.findMany({});
+  const categories = await prisma.eventCategory.findMany({});
+  console.log(categories);
+  return categories;
 }
 
 async function getUserCategoryRepository(userId: number) {
@@ -60,6 +62,7 @@ async function getUsersByCategoryRepository(category: string) {
       email: true,
       whatsapp: true,
       nome: true,
+      dataNascimento: true,
       likedCategories: {
         select: {
           id: true,

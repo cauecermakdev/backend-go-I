@@ -1,6 +1,6 @@
 # drivent-back
 
-Back-end for Driven.t, an event management solution.
+Back-end for goIngressos, an event management solution.
 
 :)
 
@@ -16,6 +16,42 @@ Driven.t is a web browser application with which you can manage every single asp
 ```bash
 npm i
 ```
+_______
+
+## .env file - with variables of my aplication
+*This file location is the root folder.*
+
+Change the password, and use the names that you prefer.
+
+````
+POSTGRES_USERNAME=caue
+POSTGRES_PASSWORD=123456
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DATABASE=goIngressos
+
+JWT_SECRET=123456
+
+DATABASE_URL=postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public
+````
+
+_______
+
+## Create the database on postgres
+On macOs - put your postgres version on postgresql@version:
+
+```brew services restart postgresql@15```
+
+Enter on postgres
+`psql postgres`
+
+Create database
+`CREATE DATABASE NAME_OF_DATABASE`
+
+Don't forget to put the name on your .env file
+
+_______
+
 
 3. Create a PostgreSQL database with whatever name you want
 4. Configure the `.env.development` file using the `.env.example` file (see "Running application locally or inside docker section" for details)
@@ -27,12 +63,13 @@ If you want change schema database you need to run before:
 npm run migration:generate
 ```
 
+If you dont change the schemas and want to fill the database
 ```bash
 npm run migration:run
 ```
 
+If you just change the seed and have the database yet run here
 6. Seed db
-
 ```bash
 npm run dev:seed
 ```
@@ -122,21 +159,6 @@ And then
 npm run dev:postgres
 ```
 
-## Routes
-POST /users
-POST /sign-in
-
-Boths have the follow format of body
-```
-{
-    "email":"caue@gmail.com",
-    "password":"12345678"
-}
-```
-
-GET /health
-Shows if the server are "ok!"
-
 
 ## Running application locally or inside docker
 
@@ -167,87 +189,6 @@ There are several things you need to do when you add new ENV VARIABLES:
 <br>
 <br>
 
-# Chamando as rotas
-
-
-<h2><b>ROTA /activities/:data</b> </h2>
- <b>- GET: /activities/2022-04-01</b>
- <br>
- <i>Formato da data 2022-04-01
-(Retorna as atividades separadas por local, com os enrollments já(buscando em bookings)</i>
-<br>
-<br>
-
-<b>Formato do retorno: </b>
-
-> [ { local{}, activities[ {}, {} ] } ...]
-
-```JSON
-[
-   {
-      {
-    "local": {
-      "id": 1,
-      "name": "Gym"
-    },
-    "activities": [
-      {
-        "id": 8,
-        "name": "Activity 2",
-        "data": "2022-04-01T00:00:00.000Z",
-        "hour_of_activity": "2022-03-16T12:00:00.000Z",
-        "local_id": 1,
-        "capacity": 13,
-        "enrollment": 3
-      },
-      {
-        "id": 7,
-        "name": "Activity 1",
-        "data": "2022-04-01T00:00:00.000Z",
-        "hour_of_activity": "2022-03-16T12:00:00.000Z",
-        "local_id": 1,
-        "capacity": 11,
-        "enrollment": 0
-      }
-      ]
-   }
-]
-```
-<br>
-<br>
-<br>
-<br>
-<h2><b>ROTA /bookingActivities</b></h2>
-
-- GET: http://localhost:4000/bookingActivities
-<br>
-<br>
-
-
-<b>RETORNO</b>
-
-```JSON
-[
-  {
-    "activity_id": 6,
-    "enrollments": 1
-  },
-  {
-    "activity_id": 2,
-    "enrollments": 1
-  },
-  {
-    "activity_id": 1,
-    "enrollments": 4
-  },
-  {
-    "activity_id": 8,
-    "enrollments": 3
-  }
-]
-```
-
-
 #Consultas POSTGRESQL
 consulta que verifica usuarios e locais escolhidos
 
@@ -257,5 +198,70 @@ JOIN "_UserLikedLocations" ul ON u.id = ul."B"
 JOIN "EventLocation" el ON ul."A" = el.id;
 
 
+## Routes
 
+# POST /sign-up
+
+Body JSON:
+
+````
+{
+    "email": "cauecermak@gmail.com",
+    "password": "12345678",
+    "whatsapp": "21982955399",
+    "nome": "Caue",
+    "dataNascimento": "1993-12-07",
+    "likedCategories": [1,2,3],
+    "likedLocations": [15]
+}
+````
+
+# POST /sign-in
+````
+{
+    "email": "cauecermak@gmail.com",
+    "password": "12345678"
+}
+````
+
+# GET /categories/all-users
+get all users of a category
+Have to put the received Bearer token of sigin
+body - JSON:
+````
+{
+    "category": "Funk"
+}
+````
+
+# GET /categories/categories
+>> getting all categories of database
+
+# POST /categories/all-users
+>> all users of system
+
+# GET categories/user
+with Bearer Token
+>> get category of specific user 
+
+# POST categories/categories
+{
+  "name": "newCategory"
+}
+
+# post /location/all-users
+with Bearer Token
+get all users by location
+````
+{
+    "location": "Stadium"
+}
+````
+
+# GET /home
+all users
+with Bearer Token
+
+GET /health
+Shows if the server are "ok!"
 
